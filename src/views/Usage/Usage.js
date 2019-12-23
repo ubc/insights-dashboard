@@ -80,6 +80,7 @@ function Usage () {
     filteredTools
   )
 
+  console.log(filterUsageData)
   return (
     <div className={classes.root}>
       <Card className={classes.card}>
