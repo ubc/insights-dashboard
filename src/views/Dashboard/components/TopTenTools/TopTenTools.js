@@ -60,7 +60,7 @@ function LineChart ({ toolTable }) {
   )
 }
 
-function LineLegend ({ toolTable }) {
+function LineLegend ({ toolTable, handleMouseOver, handleMouseOut }) {
   const toolNames = Object.keys(toolTable)
   return (
     <VictoryLegend
@@ -75,6 +75,18 @@ function LineLegend ({ toolTable }) {
           }
         ))
       }
+      events={[{
+        target: "labels",
+        eventHandlers: {
+          onMouseOver: (e) => {
+            const name = e.target.innerHTML
+            handleMouseOver(name)
+          },
+          onMouseOut: () => {
+            handleMouseOut()
+          }
+        }
+      }]}
     />
   )
 }
@@ -84,6 +96,22 @@ function TopTenTools (props) {
 
   const { loading, error, data } = useQuery(GET_TOOL_EVENT_COUNT)
   const [toolTableData, setToolTableData] = useState({})
+
+  const focusOnOneColor = (name) => {
+    let data = {...toolTableData}
+    for (const tool in toolTableData) {
+      data[tool].color = tool !== name ? '#d0d0d0' : data[tool].color
+    }
+    setToolTableData(data)
+  }
+
+  const focusOut = () => {
+    let data = {...toolTableData}
+    for (const tool in toolTableData) {
+      data[tool].color = getRandomColor()
+    }
+    setToolTableData(data)
+  }
 
   useEffect(() => {
     const eventData = getDataProp(extractQuery(TOP_TOOLS_EVENT_COUNT_TABLE, data))
@@ -107,7 +135,7 @@ function TopTenTools (props) {
                     <LineChart toolTable={toolTableData} />
                   </Grid>
                   <Grid item xs={3}>
-                    <LineLegend toolTable={toolTableData} />
+                    <LineLegend toolTable={toolTableData} handleMouseOver={focusOnOneColor} handleMouseOut={focusOut} />
                   </Grid>
                 </Grid>
               )
