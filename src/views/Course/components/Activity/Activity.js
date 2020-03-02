@@ -5,7 +5,7 @@ import { gql } from 'apollo-boost'
 import { isEmpty } from 'ramda'
 
 import getDataProp from '../../../../utils/data'
-import { ActivityChart, ChartCard } from '../../../../components'
+import { ActivityChart, ChartCard, Spinner } from '../../../../components'
 import { extractQuery } from '../../../../utils/parser'
 import { TABLE } from '../../../../utils/constants'
 
@@ -38,7 +38,7 @@ function Activity (props) {
       classes={classes}
       data={chartData}
       error={error}
-      loading={loading ? !isEmpty(chartData) : loading}
+      loading={loading ? isEmpty(chartData) : loading}
       title='Tools used in course'
       sm={false}
       md={false}
