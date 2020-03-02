@@ -4,11 +4,11 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { VictoryChart, VictoryGroup, VictoryLine, VictoryLegend } from 'victory'
 import { Grid, Paper, Typography } from '@material-ui/core'
+import colorbrewer from 'colorbrewer'
 import { Error, Spinner } from '../../../../components'
 
 import { extractQuery } from '../../../../utils/parser'
 import { TOP_TOOLS_EVENT_COUNT_TABLE } from '../../../../utils/constants'
-import { getRandomColor } from '../../../../utils/utilities'
 
 const GET_TOOL_EVENT_COUNT = gql`
 {
@@ -21,7 +21,9 @@ const GET_TOOL_EVENT_COUNT = gql`
 `
 
 const getDataProp = data => {
+  const colors = colorbrewer.Paired[10]
   const toolTable = {}
+  let currentColorIndex = 0
   if (data.length > 0) {
     data.forEach(event => {
       const { date, object_id: objectId, count } = event
@@ -32,7 +34,8 @@ const getDataProp = data => {
       }
 
       if (!toolTable[objectId]) {
-        toolTable[objectId] = { data: [], color: getRandomColor() }
+        toolTable[objectId] = { data: [], color: colors[currentColorIndex] }
+        currentColorIndex++
       }
 
       toolTable[objectId].data.push(chartProp)
@@ -65,7 +68,7 @@ function LineLegend ({ toolTable }) {
   return (
     <VictoryLegend
       title='Tools'
-      centerTitle
+      leftTitle
       gutter={20}
       data={
         toolNames.map(toolName => (
@@ -75,6 +78,15 @@ function LineLegend ({ toolTable }) {
           }
         ))
       }
+      height={500}
+      style={{
+        title: {
+          fontSize: 24,
+        },
+        labels: {
+          fontSize: 20
+        }
+      }}
     />
   )
 }
