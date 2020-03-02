@@ -22,26 +22,22 @@ const GET_TOOL_EVENT_COUNT = gql`
 
 const getDataProp = data => {
   const colors = colorbrewer.Paired[10]
-  const toolTable = {}
-  let currentColorIndex = 0
-  if (data.length > 0) {
-    data.forEach(event => {
-      const { date, object_id: objectId, count } = event
 
-      const chartProp = {
-        x: new Date(date),
-        y: count
+  return data.reduce((acc, event, i) => {
+    const { date, object_id: objectId, count } = event
+
+    const chartProp = { x: new Date(date), y: count }
+
+    if (!acc[objectId]) {
+      acc[objectId] = {
+        data: [chartProp],
+        color: colors[Object.keys(acc).length]
       }
-
-      if (!toolTable[objectId]) {
-        toolTable[objectId] = { data: [], color: colors[currentColorIndex] }
-        currentColorIndex++
-      }
-
-      toolTable[objectId].data.push(chartProp)
-    })
-  }
-  return toolTable
+    } else {
+      acc[objectId].data.push(chartProp)
+    }
+    return acc
+  }, {})
 }
 
 function LineChart ({ toolTable }) {
