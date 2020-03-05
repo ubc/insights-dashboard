@@ -4,11 +4,11 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { VictoryChart, VictoryGroup, VictoryLine, VictoryLegend } from 'victory'
 import { Grid, Paper, Typography } from '@material-ui/core'
+import colorbrewer from 'colorbrewer'
 import { Error, Spinner } from '../../../../components'
 
 import { extractQuery } from '../../../../utils/parser'
 import { TOP_TOOLS_EVENT_COUNT_TABLE } from '../../../../utils/constants'
-import { getRandomColor } from '../../../../utils/utilities'
 
 const GET_TOOL_EVENT_COUNT = gql`
 {
@@ -21,24 +21,23 @@ const GET_TOOL_EVENT_COUNT = gql`
 `
 
 const getDataProp = data => {
-  const toolTable = {}
-  if (data.length > 0) {
-    data.forEach(event => {
-      const { date, object_id: objectId, count } = event
+  const colors = colorbrewer.Paired[10]
 
-      const chartProp = {
-        x: new Date(date),
-        y: count
+  return data.reduce((acc, event, i) => {
+    const { date, object_id: objectId, count } = event
+
+    const chartProp = { x: new Date(date), y: count }
+
+    if (!acc[objectId]) {
+      acc[objectId] = {
+        data: [chartProp],
+        color: colors[Object.keys(acc).length]
       }
-
-      if (!toolTable[objectId]) {
-        toolTable[objectId] = { data: [], color: getRandomColor() }
-      }
-
-      toolTable[objectId].data.push(chartProp)
-    })
-  }
-  return toolTable
+    } else {
+      acc[objectId].data.push(chartProp)
+    }
+    return acc
+  }, {})
 }
 
 function LineChart ({ toolTable }) {
@@ -65,7 +64,7 @@ function LineLegend ({ toolTable, handleMouseOver, handleMouseOut }) {
   return (
     <VictoryLegend
       title='Tools'
-      centerTitle
+      leftTitle
       gutter={20}
       data={
         toolNames.map(toolName => (
@@ -87,6 +86,15 @@ function LineLegend ({ toolTable, handleMouseOver, handleMouseOut }) {
           }
         }
       }]}
+      height={500}
+      style={{
+        title: {
+          fontSize: 24,
+        },
+        labels: {
+          fontSize: 20
+        }
+      }}
     />
   )
 }
@@ -107,9 +115,10 @@ function TopTenTools (props) {
 
   const focusOut = () => {
     let data = {...toolTableData}
-    for (const tool in toolTableData) {
-      data[tool].color = getRandomColor()
-    }
+    const colors = colorbrewer.Paired[10]
+    toolTableData.forEach((tool, i) => {
+      data[tool].color = colors[i];
+    })
     setToolTableData(data)
   }
 
