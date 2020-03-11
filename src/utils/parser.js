@@ -31,7 +31,7 @@ export const makeChartProp = arr => {
       x: index,
       label: `${key} (${value})`,
       y: value,
-      fill: colors[index],
+      fill: colors[index]
     }
   })
 }

@@ -48,7 +48,7 @@ function SearchInput (props) {
   const classes = useStyles()
 
   return (
-    <Downshift onChange={selection => setSearchValue(selection)} id={`downshift-${label}`}>
+    <Downshift onChange={selection => setSearchValue(selection)} initialSelectedItem={searchValue} id={`downshift-${label}`}>
       {({
         getInputProps,
         getItemProps,
@@ -60,8 +60,7 @@ function SearchInput (props) {
         selectedItem
       }) => {
         const { onBlur, onFocus, ...inputProps } = getInputProps({
-          placeholder: `Search for a ${label}`,
-          value: searchValue
+          placeholder: `Search for a ${label}`
         })
 
         return (

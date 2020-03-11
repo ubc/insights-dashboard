@@ -42,9 +42,9 @@ const GET_ALL_TOOLS = gql`
 function Tools (props) {
   const url = new URL(window.location.href)
 
-  const [searchValue, setSearchValue] = useState(url.searchParams.get("searchValue")? url.searchParams.get("searchValue") : '')
-  const [startDate, setStartDate] = useState(url.searchParams.get("startDate") ? new Date(url.searchParams.get("startDate")) : new Date('2018-08-02'))
-  const [endDate, setEndDate] = useState(url.searchParams.get("endDate") ? new Date(url.searchParams.get("endDate")) : new Date())
+  const [searchValue, setSearchValue] = useState(url.searchParams.get('searchValue') ? url.searchParams.get('searchValue') : '')
+  const [startDate, setStartDate] = useState(url.searchParams.get('startDate') ? new Date(url.searchParams.get('startDate')) : new Date('2018-08-02'))
+  const [endDate, setEndDate] = useState(url.searchParams.get('endDate') ? new Date(url.searchParams.get('endDate')) : new Date())
 
   const classes = useStyles()
 

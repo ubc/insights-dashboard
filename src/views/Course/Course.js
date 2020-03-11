@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card } from '@material-ui/core'
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'
 
 import { Activity } from './components'
 import { SearchWithDate } from '../../components'
@@ -51,9 +51,9 @@ const GET_ALL_COURSES = gql`
 function Course (props) {
   const url = new URL(window.location.href)
 
-  const [searchValue, setSearchValue] = useState(url.searchParams.get("searchValue")? url.searchParams.get("searchValue") : '')
-  const [startDate, setStartDate] = useState(url.searchParams.get("startDate") ? new Date(url.searchParams.get("startDate")) : new Date('2018-08-02'))
-  const [endDate, setEndDate] = useState(url.searchParams.get("endDate") ? new Date(url.searchParams.get("endDate")) : new Date())
+  const [searchValue, setSearchValue] = useState(url.searchParams.get('searchValue') ? url.searchParams.get('searchValue') : '')
+  const [startDate, setStartDate] = useState(url.searchParams.get('startDate') ? new Date(url.searchParams.get('startDate')) : new Date('2018-08-02'))
+  const [endDate, setEndDate] = useState(url.searchParams.get('endDate') ? new Date(url.searchParams.get('endDate')) : new Date())
 
   const classes = useStyles()
 

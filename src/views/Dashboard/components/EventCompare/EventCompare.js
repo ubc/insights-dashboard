@@ -40,7 +40,7 @@ function EventCompare (props) {
       error={error}
       loading={loading}
       title='Tool use vs tool launch events'
-      chartContainerProp={{ minDomain: {x: -1}, maxDomain: {x: 2} }}
+      chartContainerProp={{ minDomain: { x: -1 }, maxDomain: { x: 2 } }}
     />
   )
 }

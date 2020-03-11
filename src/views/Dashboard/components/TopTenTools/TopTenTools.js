@@ -77,7 +77,7 @@ function LineLegend ({ toolTable }) {
       height={500}
       style={{
         title: {
-          fontSize: 24,
+          fontSize: 24
         },
         labels: {
           fontSize: 20

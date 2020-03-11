@@ -14,9 +14,11 @@ function BarChartNoAxes (props) {
         <VictoryBar
           {...chartProp}
           data={data}
-          style={{ data: {
-            fill: (d) => d.fill
-          }}}
+          style={{
+            data: {
+              fill: (d) => d.fill
+            }
+          }}
         />
       </VictoryGroup>
     </div>
