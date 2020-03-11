@@ -20,6 +20,8 @@ const GET_TOOL_EVENT_COUNT = gql`
 }
 `
 
+const nonHoverColor = "#d0d0d0"
+
 const getDataProp = data => {
   const colors = colorbrewer.Paired[10]
 
@@ -107,8 +109,8 @@ function TopTenTools (props) {
 
   const focusOnOneColor = (name) => {
     let data = {...toolTableData}
-    for (const tool in toolTableData) {
-      data[tool].color = tool !== name ? '#d0d0d0' : data[tool].color
+    for (const toolName in toolTableData) {
+      data[toolName].color = toolName === name ? data[toolName].color :  nonHoverColor
     }
     setToolTableData(data)
   }
@@ -116,8 +118,8 @@ function TopTenTools (props) {
   const focusOut = () => {
     let data = {...toolTableData}
     const colors = colorbrewer.Paired[10]
-    toolTableData.forEach((tool, i) => {
-      data[tool].color = colors[i];
+    toolTableData.forEach((toolName, i) => {
+      data[toolName].color = colors[i];
     })
     setToolTableData(data)
   }
