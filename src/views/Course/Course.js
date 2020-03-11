@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 import { makeStyles } from '@material-ui/core/styles'
 import { Card } from '@material-ui/core'
+import { withRouter } from 'react-router-dom';
 
 import { Activity } from './components'
 import { SearchWithDate } from '../../components'
@@ -47,10 +48,12 @@ const GET_ALL_COURSES = gql`
 }
 `
 
-function Course () {
-  const [searchValue, setSearchValue] = useState('')
-  const [startDate, setStartDate] = useState(new Date('2018-08-02'))
-  const [endDate, setEndDate] = useState(new Date())
+function Course (props) {
+  const url = new URL(window.location.href)
+
+  const [searchValue, setSearchValue] = useState(url.searchParams.get("searchValue")? url.searchParams.get("searchValue") : '')
+  const [startDate, setStartDate] = useState(url.searchParams.get("startDate") ? new Date(url.searchParams.get("startDate")) : new Date('2018-08-02'))
+  const [endDate, setEndDate] = useState(url.searchParams.get("endDate") ? new Date(url.searchParams.get("endDate")) : new Date())
 
   const classes = useStyles()
 
@@ -63,6 +66,12 @@ function Course () {
     label: getValue(COURSE, suggestion)
   }))
 
+  useEffect(() => {
+    const startDateStr = formatDate(new Date(), startDate)
+    const endDateStr = formatDate(new Date(), endDate)
+    props.history.push(`course?searchValue=${searchValue}&startDate=${startDateStr}&endDate=${endDateStr}`)
+  }, [searchValue, startDate, endDate])
+
   return (
     <div className={classes.root}>
       <Card className={classes.card}>
@@ -72,6 +81,7 @@ function Course () {
             endDate={endDate}
             searchError={error}
             searchLoad={loading}
+            searchValue={searchValue}
             setEndDate={setEndDate}
             setSearchValue={setSearchValue}
             setStartDate={setStartDate}
@@ -87,6 +97,9 @@ function Course () {
             startDate={startDateResolver}
             endDate={endDateResolver}
             searchValue={searchValue}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+            setSearchValue={setSearchValue}
           />
 
         </div>
@@ -95,4 +108,4 @@ function Course () {
   )
 }
 
-export default Course
+export default withRouter(Course)
