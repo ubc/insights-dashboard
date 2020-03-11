@@ -13,9 +13,11 @@ function BarChart (props) {
         <VictoryBar
           {...chartProp}
           data={data}
-          style={{ data: {
-            fill: (d) => d.fill
-          }}}
+          style={{
+            data: {
+              fill: (d) => d.fill
+            }
+          }}
         />
       </VictoryChart>
     </div>

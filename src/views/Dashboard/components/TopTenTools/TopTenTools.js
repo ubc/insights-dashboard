@@ -91,7 +91,7 @@ function LineLegend ({ toolTable, handleMouseOver, handleMouseOut }) {
       height={500}
       style={{
         title: {
-          fontSize: 24,
+          fontSize: 24
         },
         labels: {
           fontSize: 20

@@ -44,11 +44,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function SearchInput (props) {
-  const { label, loading, error, setSearchValue, suggestions } = props
+  const { label, loading, error, searchValue, setSearchValue, suggestions } = props
   const classes = useStyles()
 
   return (
-    <Downshift onChange={selection => setSearchValue(selection)} id={`downshift-${label}`}>
+    <Downshift onChange={selection => setSearchValue(selection)} initialSelectedItem={searchValue} id={`downshift-${label}`}>
       {({
         getInputProps,
         getItemProps,
