@@ -20,6 +20,8 @@ const GET_TOOL_EVENT_COUNT = gql`
 }
 `
 
+const nonHoverColor = "#d0d0d0"
+
 const getDataProp = data => {
   const colors = colorbrewer.Paired[10]
 
@@ -59,7 +61,7 @@ function LineChart ({ toolTable }) {
   )
 }
 
-function LineLegend ({ toolTable }) {
+function LineLegend ({ toolTable, handleMouseOver, handleMouseOut }) {
   const toolNames = Object.keys(toolTable)
   return (
     <VictoryLegend
@@ -74,6 +76,18 @@ function LineLegend ({ toolTable }) {
           }
         ))
       }
+      events={[{
+        target: "labels",
+        eventHandlers: {
+          onMouseOver: (e) => {
+            const name = e.target.innerHTML
+            handleMouseOver(name)
+          },
+          onMouseOut: () => {
+            handleMouseOut()
+          }
+        }
+      }]}
       height={500}
       style={{
         title: {
@@ -92,6 +106,23 @@ function TopTenTools (props) {
 
   const { loading, error, data } = useQuery(GET_TOOL_EVENT_COUNT)
   const [toolTableData, setToolTableData] = useState({})
+
+  const focusOnOneColor = (name) => {
+    let data = {...toolTableData}
+    for (const toolName in toolTableData) {
+      data[toolName].color = toolName === name ? data[toolName].color :  nonHoverColor
+    }
+    setToolTableData(data)
+  }
+
+  const focusOut = () => {
+    let data = {...toolTableData}
+    const colors = colorbrewer.Paired[10]
+    toolTableData.forEach((toolName, i) => {
+      data[toolName].color = colors[i];
+    })
+    setToolTableData(data)
+  }
 
   useEffect(() => {
     const eventData = getDataProp(extractQuery(TOP_TOOLS_EVENT_COUNT_TABLE, data))
@@ -115,7 +146,7 @@ function TopTenTools (props) {
                     <LineChart toolTable={toolTableData} />
                   </Grid>
                   <Grid item xs={3}>
-                    <LineLegend toolTable={toolTableData} />
+                    <LineLegend toolTable={toolTableData} handleMouseOver={focusOnOneColor} handleMouseOut={focusOut} />
                   </Grid>
                 </Grid>
               )
