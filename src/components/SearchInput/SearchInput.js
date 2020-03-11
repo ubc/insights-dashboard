@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function SearchInput (props) {
-  const { label, loading, error, setSearchValue, suggestions } = props
+  const { label, loading, error, searchValue, setSearchValue, suggestions } = props
   const classes = useStyles()
 
   return (
@@ -60,7 +60,8 @@ function SearchInput (props) {
         selectedItem
       }) => {
         const { onBlur, onFocus, ...inputProps } = getInputProps({
-          placeholder: `Search for a ${label}`
+          placeholder: `Search for a ${label}`,
+          value: searchValue
         })
 
         return (
